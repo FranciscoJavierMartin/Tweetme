@@ -17,7 +17,7 @@ A tweeter clone
 2. Tweets
   -> Creating
     -> Text
-    -> Image
+    -> Image -> Media storage server
   -> Delete
   -> Retweeting
 
