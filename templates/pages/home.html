@@ -1,13 +1,19 @@
 {% extends "base.html" %} {% block head_title %} Home {% endblock head_title %}
-{% block content %}
-
-Welcome to tweetme
+{% block content %} Welcome to tweetme
 
 <div id="tweets">
   Replace me
 </div>
 
 <script>
+  function formatTweetElement(accumulator, tweet) {
+    return `${accumulator}
+      <div class='mb-4' id='tweet-${tweet.id}'>
+        <h1>${tweet.id}</h1>
+        <p>${tweet.content}</p>
+      </div>`;
+  }
+
   const tweetsElement = document.getElementById('tweets');
   tweetsElement.innerHTML = 'Loading...';
 
@@ -25,12 +31,12 @@ Welcome to tweetme
   xhr.responseType = responseType;
   xhr.open(method, url);
   xhr.onload = function () {
-    console.log(xhr.response);
     var listedItems = xhr.response.response;
+    listedItems.reduce(formatTweetElement, '');
   };
   xhr.onerror = () => {
     console.log('error');
-  }
+  };
   xhr.send();
 </script>
 
