@@ -1,24 +1,37 @@
-{% extends "base.html" %}
-
-{% block head_title %}
-Home
-{% endblock head_title %}
-
+{% extends "base.html" %} {% block head_title %} Home {% endblock head_title %}
 {% block content %}
+
 Welcome to tweetme
-{% endblock content %}
+
+<div id="tweets">
+  Replace me
+</div>
 
 <script>
-const xhr = new XMLHttpRequest()
-const method = 'GET';
-const url = '/tweets';
-const responseType = 'json';
+  const tweetsElement = document.getElementById('tweets');
+  tweetsElement.innerHTML = 'Loading...';
 
-xhr.responseType = responseType;
-xhr.open(method, url);
-xhr.onload = function(){
-  console.log(xhr.response);
-  var listedItems = xhr.response.response;
-};
-xhr.send();
+  const el1 = '<h1>Hi there 1</h1>';
+  const el2 = '<h1>Hi there 2</h1>';
+  const el3 = '<h1>Hi there 3</h1>';
+
+  tweetsElement.innerHTML = el1 + el2 + el3;
+
+  const xhr = new XMLHttpRequest();
+  const method = 'GET';
+  const url = '/tweets';
+  const responseType = 'json';
+
+  xhr.responseType = responseType;
+  xhr.open(method, url);
+  xhr.onload = function () {
+    console.log(xhr.response);
+    var listedItems = xhr.response.response;
+  };
+  xhr.onerror = () => {
+    console.log('error');
+  }
+  xhr.send();
 </script>
+
+{% endblock content %}
