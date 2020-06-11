@@ -6,11 +6,13 @@
 </div>
 
 <script>
+  function likeBtn() {}
+
   function formatTweetElement(accumulator, tweet) {
     return `${accumulator}
       <div class='mb-4' id='tweet-${tweet.id}'>
         <h1>${tweet.id}</h1>
-        <p>${tweet.content}</p>
+        <p>${tweet.content}${likeBtn()}</p>
       </div>`;
   }
 
