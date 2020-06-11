@@ -6,24 +6,28 @@
 </div>
 
 <script>
-  function likeBtn() {}
+  function handleDidLike(tweet_id, currentCount) {
+    currentCount++;
+    return;
+  }
+
+  function likeBtn(tweet) {
+    return `<button class='btn btn-primary' 
+      onclick=handleDidLike(${tweet.id}, ${tweet.likes})>
+        Like
+      </button>`;
+  }
 
   function formatTweetElement(accumulator, tweet) {
     return `${accumulator}
       <div class='mb-4' id='tweet-${tweet.id}'>
-        <h1>${tweet.id}</h1>
-        <p>${tweet.content}${likeBtn()}</p>
+        <h3>${tweet.id}</h1>
+        <div class='btn-group'>${tweet.content} a${likeBtn()}</div>
       </div>`;
   }
 
   const tweetsElement = document.getElementById('tweets');
   tweetsElement.innerHTML = 'Loading...';
-
-  const el1 = '<h1>Hi there 1</h1>';
-  const el2 = '<h1>Hi there 2</h1>';
-  const el3 = '<h1>Hi there 3</h1>';
-
-  tweetsElement.innerHTML = el1 + el2 + el3;
 
   const xhr = new XMLHttpRequest();
   const method = 'GET';
@@ -34,6 +38,7 @@
   xhr.open(method, url);
   xhr.onload = function () {
     var listedItems = xhr.response.response;
+    console.log(listedItems);
     listedItems.reduce(formatTweetElement, '');
   };
   xhr.onerror = () => {
