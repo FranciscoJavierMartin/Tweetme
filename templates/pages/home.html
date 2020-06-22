@@ -1,14 +1,28 @@
 {% extends "base.html" %} {% block head_title %} Home {% endblock head_title %}
-{% block content %} Welcome to tweetme
+{% block content %}
 
-<div id="tweets">
-  Replace me
+<div class='row text-center'>
+  <div class='col'>
+    <h1>Welcome to tweetme
+  </div>
 </div>
+
+<div class='row mb-3'>
+  <div class='col-md-4 mx-auto col-10'>
+    <form class="form" method="POST" action='/create-tweet'>
+      {% csrf_token %}
+      <input type="hidden" value="/" name="next"/>
+      <textarea class="form-control" name="content" placeholder="Write your tweet" ></textarea>
+      <button type="submit" class="btn btn-primary">Tweet</button>
+    </form>
+  </div>
+</div>
+
+<div class='row' id="tweets"></div>
 
 <script>
   function handleDidLike(tweet_id, currentCount) {
     currentCount++;
-    return;
   }
 
   function likeBtn(tweet) {
@@ -20,9 +34,9 @@
 
   function formatTweetElement(accumulator, tweet) {
     return `${accumulator}
-      <div class='mb-4' id='tweet-${tweet.id}'>
+      <div class='col-12 mb-4' id='tweet-${tweet.id}'>
         <h3>${tweet.id}</h1>
-        <div class='btn-group'>${tweet.content} a${likeBtn()}</div>
+        <div class='btn-group'>${tweet.content} ${likeBtn(tweet)}</div>
       </div>`;
   }
 
@@ -38,8 +52,7 @@
   xhr.open(method, url);
   xhr.onload = function () {
     var listedItems = xhr.response.response;
-    console.log(listedItems);
-    listedItems.reduce(formatTweetElement, '');
+    tweetsElement.innerHTML = listedItems.reduce(formatTweetElement, '');
   };
   xhr.onerror = () => {
     console.log('error');
