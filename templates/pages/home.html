@@ -53,8 +53,8 @@
     xhr.responseType = responseType;
     xhr.open(method, url);
     xhr.onload = function () {
-      var listedItems = xhr.response.response;
-      tweetsElement.innerHTML = listedItems.reduce(formatTweetElement, '');
+        var listedItems = xhr.response.response;
+        tweetsElement.innerHTML = listedItems.reduce(formatTweetElement, '');
     };
     xhr.onerror = () => {
       console.log('error');
@@ -80,7 +80,14 @@
         const ogHtml = tweetsContainerElement.innerHTML
         tweetsContainerElement.innerHTML = newTweetElement + ogHtml;
         myForm.reset();
+      } else if(xhr.status === 400){
+        const errorJson = chr.response;
+        console.log(errorJson);
       }
+    }
+
+    xhr.onerror = function(){
+      console.log('Error');
     }
 
     xhr.send(myFormData);
