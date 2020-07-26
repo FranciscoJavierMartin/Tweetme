@@ -11,6 +11,7 @@
   <div class='col-md-4 mx-auto col-10'>
     <form id='tweet-create-form' class="form" method="POST" action='/create-tweet/'>
       {% csrf_token %}
+      <div class="d-none alert alert-danger" id="tweet-create-form-error"></div>
       <input type="hidden" value="/" name="next"/>
       <textarea required='required' class="form-control" name="content" placeholder="Write your tweet" ></textarea>
       <button type="submit" class="btn btn-primary">Tweet</button>
@@ -21,6 +22,19 @@
 <div class='row' id="tweets"></div>
 
 <script>
+
+  function handleTweetFormError(msg, display){
+    var myErrorDiv = document.getElementById('tweet-create-form-error');
+
+    if(display){
+      myErrorDiv.setAttribute('class', 'd-block alert alert-danger');
+      myErrorDiv.innerText = msg;
+    } else {
+      myErrorDiv.setAttribute('class', 'd-none alert alert-danger');
+    }
+
+  }
+
   function handleDidLike(tweet_id, currentCount) {
     currentCount++;
   }
@@ -75,6 +89,7 @@
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.onload = () => {
       if(xhr.status === 201){
+        handleTweetFormError('', false);
         const newTweet = xhr.response;
         const newTweetElement = formatTweetElement(newTweet);
         const ogHtml = tweetsContainerElement.innerHTML
@@ -82,7 +97,21 @@
         myForm.reset();
       } else if(xhr.status === 400){
         const errorJson = chr.response;
+        const contentError = errorJson.content;
+        let contentErrorMessage;
+
+        if(contentError){
+          contentErrorMessage = contentError[0];
+          if(contentErrorMessage){
+            handleTweetFormError(contentErrorMessage, true);
+          }
+        } else {
+          alert('An error occured. Please try again.');
+        }
+        console.log(contentErrorMessage);
         console.log(errorJson);
+      } else if(xhr.status === 500){
+        alert('There was a server error');
       }
     }
 
