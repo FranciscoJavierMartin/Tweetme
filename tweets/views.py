@@ -35,7 +35,7 @@ def tweet_create_view(request, *args, **kwargs):
 
 
 @api_view(['GET'])
-def tweets_list_view(request, *args, **kwargs):
+def tweet_list_view(request, *args, **kwargs):
     qs = Tweet.objects.all()
     serializer = TweetSerializer(qs, many=True)
     return Response(serializer.data)
@@ -60,14 +60,13 @@ def tweet_delete_view(request, tweet_id, *args, **kwargs):
         return Response({}, status=status.HTTP_404_NOT_FOUND)
 
     qs = qs.filter(user=request.user)
-    if not qs.exitsts():
+    if not qs.exists():
         return Response({'message': 'You cannot delete this tweet'},
-                        status=status.HTTP_403_FORBIDDEN)
+                        status=status.HTTP_401_UNAUTHORIZED)
 
     obj = qs.first()
     obj.delete()
-    serializer = TweetSerializer(obj)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({'message': 'Tweet removed'}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
