@@ -76,7 +76,7 @@ def tweet_action_view(request, tweet_id, *args, **kwargs):
     id is required
     Action options are: like, unlike, retweet
     """
-    serializer = TweetActionSerializer(request.POST)
+    serializer = TweetActionSerializer(data=request.data)
 
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
@@ -91,12 +91,14 @@ def tweet_action_view(request, tweet_id, *args, **kwargs):
 
         if action == 'like':
             obj.likes.add(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         if action == 'unlike':
             obj.likes.remove(request.user)
         elif action == 'retweet':
             pass
 
-    return Response({'message': 'Tweet updated'}, status=status.HTTP_200_OK)
+    return Response({}, status=status.HTTP_200_OK)
 
 # def tweet_create_view_pure_django(request, *args, **kwargs):
 #     """
