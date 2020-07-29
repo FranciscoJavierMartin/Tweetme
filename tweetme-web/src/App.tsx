@@ -50,7 +50,18 @@ const Tweet = (props) => {
   return (
     <div className={className}>
       <p>{tweet.content}</p>
+      <ActionBtn tweet={tweet} action={{type: 'like'}} />
     </div>
   );
 };
+
+const ActionBtn = (props) => {
+  const { tweet, className, action } = props;
+  return action.type === 'like' ? (
+    <button className={className}>
+      {tweet.likes} Likes
+    </button>
+  ):null;
+};
+
 export default App;
