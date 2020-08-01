@@ -24,12 +24,20 @@ export const Tweet = (props) => {
 export const ActionBtn = (props) => {
   const { tweet, className, action } = props;
   const actionDisplay = action.display ? action.display : 'Action';
-  let likes = tweet.likes;
+  const [likes, setLikes] = useState(tweet.likes ? tweet.likes : 0);
+  const [userLike, setUserLike] = useState(!!tweet.userLike);
+
   const handleClick = (event) => {
     event.preventDefault();
     if (action.type === 'like') {
-      console.log(likes + 1);
-      likes = tweet + 1;
+      if(userLike){
+        setLikes(likes - 1);
+        setUserLike(false);
+      } else {
+        setLikes(likes + 1);
+        setUserLike(true);
+      }
+      
     }
   };
   const display =
